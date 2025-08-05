@@ -12,15 +12,13 @@ class AppFactory
     {
         $container = new Container();
 
-        $container->set(MySQL::class, function() {
-            return new MySQL(
-                getenv('MYSQL_HOST'),
-                getenv('MYSQL_DATABASE'),
-                getenv('MYSQL_CHARSET'),
-                getenv('MYSQL_USER'),
-                getenv('MYSQL_PASSWORD')
-            );
-        });
+        $container->set(MySQL::class, fn () => new MySQL(
+            getenv('MYSQL_HOST'),
+            getenv('MYSQL_DATABASE'),
+            getenv('MYSQL_CHARSET'),
+            getenv('MYSQL_USER'),
+            getenv('MYSQL_PASSWORD')
+        ));
 
         SlimAppFactory::setContainer($container);
 
@@ -36,7 +34,7 @@ class AppFactory
 
         foreach ($modules as $module) {
             $moduleRoutePath = sprintf("%s/%s/routes.php", $modulesPath, $module);
-            if (!is_readable($moduleRoutePath) || !is_file($moduleRoutePath)) {
+            if (!is_file($moduleRoutePath)) {
                 continue;
             }
 
@@ -48,7 +46,7 @@ class AppFactory
             $appModule($app);
 
             $moduleContainersPath = sprintf("%s/%s/containers.php", $modulesPath, $module);
-            if (!is_readable($moduleContainersPath) || !is_file($moduleContainersPath)) {
+            if (!is_file($moduleContainersPath)) {
                 continue;
             }
 

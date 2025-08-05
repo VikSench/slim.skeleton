@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  mysql:
+    env_file:
+      - .env
+    build:
+      context: ./docker/mysql
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+      - ./volumes/mysql_queries:/var/mysql_queries
+      - ./volumes/mysql_queries/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - whiterate
+
+  php-fpm:
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app
+    build:
+      context: ./docker/php-fpm
+    user: "${UID}:${GID}"
+    networks:
+      - whiterate
+
+  nginx:
+    env_file:
+      - .env
+    build:
+      context: ./docker/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./app:/app
+    depends_on:
+      - php-fpm
+    networks:
+      - whiterate
+
+networks:
+  whiterate:
+    driver: bridge

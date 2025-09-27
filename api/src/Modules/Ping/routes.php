@@ -3,8 +3,11 @@
 use App\Modules\Ping\Actions\PingAction;
 use App\Modules\Ping\Actions\ConfigAction;
 use Slim\App;
+use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
-    $app->get('/ping', PingAction::class);
-    $app->get('/config', ConfigAction::class);
+    $app->group('/api', function(RouteCollectorProxy $group) {
+        $group->get('/ping', PingAction::class);
+        $group->get('/config', ConfigAction::class);
+    });
 };

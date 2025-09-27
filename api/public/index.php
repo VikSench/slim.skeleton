@@ -1,4 +1,6 @@
-<?php
+<?php declare(strict_types=1);
+
+echo 'asa';exit;
 
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');

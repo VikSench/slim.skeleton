@@ -17,10 +17,10 @@ services:
     env_file:
       - .env
     volumes:
-      - ./app:/app
+      - ./api:/app
     build:
       context: ./docker/php-fpm
-    user: "${UID}:${GID}"
+    # user: "${UID}:${GID}"
     networks:
       - whiterate
 
@@ -33,6 +33,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - ./api:/api
       - ./app:/app
     depends_on:
       - php-fpm

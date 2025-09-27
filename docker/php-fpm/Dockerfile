@@ -1,7 +1,5 @@
 FROM php:8.2-fpm-alpine3.20
 
-WORKDIR /app
-
 RUN apk add --no-cache \
     bash \
     vim \

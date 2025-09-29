@@ -13,6 +13,18 @@ services:
     networks:
       - whiterate
 
+  node:
+    build:
+      context: ./docker/node
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/app
+      # - /app/node_modules
+    tty: true
+    networks:
+      - whiterate
+
   php-fpm:
     env_file:
       - .env

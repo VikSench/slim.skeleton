@@ -1,0 +1,48 @@
+.MainLayout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  gap: 16px;
+
+  &-header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: center;
+    z-index: 100;
+
+    &-container {
+      display: flex;
+      flex: 1;
+      max-width: 1160px;
+      padding: 0 20px;
+    }
+  }
+  &-content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    justify-content: center;
+    display: flex;
+
+    &-container {
+      display: flex;
+      flex: 1;
+      max-width: 1160px;
+      padding: 10px;
+    }
+  }
+  &-footer {
+    flex: 0 0 auto;
+    background: #00f;
+    justify-content: center;
+    display: flex;
+
+    &-container {
+      display: flex;
+      flex: 1;
+      max-width: 1160px;
+      padding: 0 20px;
+    }
+  }
+}

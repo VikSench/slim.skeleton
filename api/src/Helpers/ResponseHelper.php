@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 class ResponseHelper
 {
-    public static function prepareResponse(array|null $data, array|null $errors = null): string
+    public static function prepareResponse(array|null $data = null, array|null $errors = null): string
     {
         $response = is_null($errors)
             ? ['data' => $data]

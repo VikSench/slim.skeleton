@@ -2,7 +2,7 @@
 
 namespace App\Modules\Auth\Services;
 
-use App\Modules\Auth\Exceptions\JWTInvalidTypeException;
+use App\Modules\Auth\Exceptions\AuthException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use stdClass;
@@ -24,13 +24,13 @@ class JWTService
         $ttl = (int)getenv(match ($type) {
             self::JWT_TOKEN_TYPE_ACCESS => 'JWT_TOKEN_TTL_ACCESS',
             self::JWT_TOKEN_TYPE_REFRESH => 'JWT_TOKEN_TTL_REFRESH',
-            default => throw new JWTInvalidTypeException('Invalid token type'),
+            default => throw new AuthException('Invalid token type'),
         }) ?: self::JWT_TOKEN_TTLS[$type];
 
         $secret = getenv(match ($type) {
             self::JWT_TOKEN_TYPE_ACCESS => 'JWT_TOKEN_SECRET_ACCESS',
             self::JWT_TOKEN_TYPE_REFRESH => 'JWT_TOKEN_SECRET_REFRESH',
-            default => throw new JWTInvalidTypeException('Invalid token type'),
+            default => throw new AuthException('Invalid token type'),
         });
 
         $tokenPayload = [
@@ -48,14 +48,13 @@ class JWTService
         $secret = getenv(match ($type) {
             self::JWT_TOKEN_TYPE_ACCESS => 'JWT_TOKEN_SECRET_ACCESS',
             self::JWT_TOKEN_TYPE_REFRESH => 'JWT_TOKEN_SECRET_REFRESH',
-            default => throw new JWTInvalidTypeException('Invalid token type'),
+            default => throw new AuthException('Invalid token type'),
         });
 
         $decoded = JWT::decode($token, new Key($secret, getenv('JWT_TOKEN_ALGO')));
 
         if (($decoded->type ?? null) !== $type) {
-            throw new JWTInvalidTypeException('Mismatched token type');
-
+            throw new AuthException('Mismatched token type');
         }
 
         return $decoded;

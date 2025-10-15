@@ -27,7 +27,6 @@ class CipherService
         $ciphertext = openssl_encrypt($text, $this->cipher, getenv('CIPHER_SERVICE_SECRET_KEY'), 0, $iv);
 
         return base64_encode($iv . $ciphertext);
-
     }
 
     public function decrypt(string $text): string
@@ -39,5 +38,4 @@ class CipherService
 
         return openssl_decrypt($ciphertext, $this->cipher, getenv('CIPHER_SERVICE_SECRET_KEY'), 0, $iv);
     }
-
 }

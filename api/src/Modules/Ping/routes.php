@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use App\Modules\Ping\Actions\PingAction;
 use App\Modules\Ping\Actions\ConfigAction;

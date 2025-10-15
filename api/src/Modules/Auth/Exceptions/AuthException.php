@@ -4,4 +4,4 @@ namespace App\Modules\Auth\Exceptions;
 
 use App\Exceptions\CoreException;
 
-class JWTInvalidTypeException extends CoreException {}
+class AuthException extends CoreException {}

@@ -4,6 +4,8 @@ namespace App\Bootstrap;
 
 use App\Services\MySQL;
 use DI\Container;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Slim\Factory\AppFactory as SlimAppFactory;
 
 class AppFactory
@@ -19,6 +21,7 @@ class AppFactory
             getenv('MYSQL_USER'),
             getenv('MYSQL_PASSWORD')
         ));
+        $container->set(Logger::class, fn () => (new Logger('info'))->pushHandler(new StreamHandler(__DIR__ . '/../logs/info.log')));
 
         SlimAppFactory::setContainer($container);
 

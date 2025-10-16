@@ -1,53 +1,34 @@
+import { useClient } from '../providers/ClientProvider';
 import './../assets/scss/layouts/MainLayout.scss';
 
-import { useTelegram } from '../providers/TelegramProvider';
-// import { Outlet } from 'react-router-dom';
-import { useEffect } from 'react';
-import axios from 'axios';
+import { Outlet } from 'react-router-dom';
 
 const MainLayout = () => {
-  const { telegramWebApp } = useTelegram();
+  const { client } = useClient();
 
-  useEffect(() => {
-    if (telegramWebApp) {
-      axios.post('https://commodious-overlusciously-estell.ngrok-free.dev/api/v1/logger/telegram', {}, {
-        headers: {
-          Authorization: `Telegram ${telegramWebApp.initData}`
-        },
-      })
-        .then(res => console.log(res))
-        .catch(console.error);
+  if (client?.clientType === 'telegram') {
+    const isMobile = /ios|android/i.test(client.telegram.WebApp.platform);
+
+    if (isMobile) {
+      client.telegram.WebApp.requestFullscreen();
     }
-  }, [ telegramWebApp ]);
+  }
 
   return (
     <div className="MainLayout">
       <header className="MainLayout-header">
         <div className="MainLayout-header-container">
-          {telegramWebApp
-            ? (
-              <div>
-                Telegram agent v1.001
-              </div>
-            )
-            : (
-              <div>Not a telegram agent</div>
-            )
-          }
+          { client?.clientType }
         </div>
       </header>
       <main className="MainLayout-content">
-
         <div className="MainLayout-content-container">
-          <div>
-          { JSON.stringify(telegramWebApp?.initData) }
-          </div>
-          {/* <Outlet /> */}
+          <Outlet />
         </div>
       </main>
       <footer className="MainLayout-footer">
         <div className="MainLayout-footer-container">
-          FOOTER
+          { client?.clientType === 'telegram' && (client.telegram.WebApp.platform) }
         </div>
       </footer>
     </div>

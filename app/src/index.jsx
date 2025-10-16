@@ -3,20 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import TelegramProvider from './providers/TelegramProvider';
-
-window.addEventListener("error", (e) => {
-  if (e.message?.includes("TelegramGameProxy")) {
-    e.preventDefault();
-  }
-});
+import ClientProvider from './providers/ClientProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <TelegramProvider>
+    <ClientProvider>
       <App />
-    </TelegramProvider>
+    </ClientProvider>
   </React.StrictMode>
 );
 

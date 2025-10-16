@@ -18,7 +18,7 @@ class AuthMiddleware implements MiddlewareInterface
 {
     private readonly Response $response;
 
-    public function __construct(private readonly Logger $logger)
+    public function __construct()
     {
         $this->response = new Response();
     }

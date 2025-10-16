@@ -3,6 +3,7 @@
   flex-direction: column;
   min-height: 100vh;
   gap: 16px;
+  background: #F4F9FD;
 
   &-header {
     position: sticky;
@@ -34,7 +35,7 @@
   }
   &-footer {
     flex: 0 0 auto;
-    background: #00f;
+    background: #CDDDF4;
     justify-content: center;
     display: flex;
 

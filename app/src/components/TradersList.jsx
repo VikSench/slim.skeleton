@@ -1,74 +1,179 @@
 import './../assets/scss/components/traders/TradersList.scss';
 
+import axios from "axios";
 import TraderCard from "./TraderCard";
+import { useEffect, useState } from 'react';
+import { useClient } from '../providers/ClientProvider';
 
 const TradersList = () => {
   const traders = [
     {
-      name: "Trader One",
-      banks: ["Bank of America", "Chase"],
-      description: "Experienced trader specializing in short-term strategies and risk management across multiple markets.",
-      currencies: ["USD", "EUR", "JPY"]
+      id: 1,
+      name: "AlphaTrade",
+      countries: ["USA", "UK", "Germany"],
+      banks: ["HSBC", "Barclays", "Deutsche Bank"],
+      description: "Надёжный международный трейдер с опытом более 10 лет.",
+      rating: 9.2
     },
     {
-      name: "Trader Two",
-      banks: ["HSBC", "Citibank", "Wells Fargo"],
-      description: "Focuses on currency trading with a keen eye for emerging market opportunities and volatility.",
-      currencies: ["GBP", "USD", "AUD"]
+      id: 2,
+      name: "EuroFX",
+      countries: ["France", "Spain", "Italy"],
+      banks: ["BNP Paribas", "Santander", "UniCredit"],
+      description: "Специализируется на валютных парах евро.",
+      rating: 8.5
     },
     {
-      name: "Trader Three",
-      banks: ["Deutsche Bank"],
-      description: "Long-term investment enthusiast with expertise in portfolio diversification and hedging strategies.",
-      currencies: ["EUR", "CHF"]
+      id: 3,
+      name: "NordInvest",
+      countries: ["Sweden", "Norway", "Finland"],
+      banks: ["SEB", "Nordea", "Danske Bank"],
+      description: "Скандинавская надёжность и прозрачность.",
+      rating: 8.9
     },
     {
-      name: "Trader Four",
-      banks: ["Santander", "Barclays"],
-      description: "Passionate about technical analysis and momentum trading, often exploring innovative strategies.",
-      currencies: ["USD", "EUR", "GBP", "JPY"]
+      id: 4,
+      name: "Atlantic Capital",
+      countries: ["USA", "Canada"],
+      banks: ["Bank of America", "Scotiabank"],
+      description: "Фокус на фондовом рынке Северной Америки.",
+      rating: 9.0
     },
     {
-      name: "Trader Five",
-      banks: ["BNP Paribas", "Credit Suisse"],
-      description: "Combines fundamental analysis with algorithmic trading to maximize returns across markets.",
-      currencies: ["EUR", "USD"]
+      id: 5,
+      name: "SwissPrime",
+      countries: ["Switzerland", "Austria"],
+      banks: ["Credit Suisse", "UBS"],
+      description: "Швейцарская точность и конфиденциальность.",
+      rating: 9.7
     },
     {
-      name: "Trader Six",
-      banks: ["Goldman Sachs"],
-      description: "Specializes in commodities and futures, constantly monitoring global economic indicators.",
-      currencies: ["USD", "CAD", "AUD"]
+      id: 6,
+      name: "AsiaTradeHub",
+      countries: ["Japan", "Singapore", "Hong Kong"],
+      banks: ["Mitsubishi UFJ", "DBS", "HSBC"],
+      description: "Торговля с акцентом на азиатские рынки.",
+      rating: 8.8
     },
     {
-      name: "Trader Seven",
-      banks: ["Morgan Stanley", "UBS"],
-      description: "Focused on risk-adjusted returns and dynamic asset allocation across asset classes.",
-      currencies: ["EUR", "GBP", "USD"]
+      id: 7,
+      name: "PacificTrust",
+      countries: ["Australia", "New Zealand"],
+      banks: ["ANZ", "Westpac"],
+      description: "Надёжный партнёр на рынке Океании.",
+      rating: 8.3
     },
     {
-      name: "Trader Eight",
-      banks: ["Societe Generale"],
-      description: "Expert in options trading with a strong emphasis on volatility and time decay strategies.",
-      currencies: ["USD", "JPY"]
+      id: 8,
+      name: "MiddleEastFinance",
+      countries: ["UAE", "Saudi Arabia", "Qatar"],
+      banks: ["Emirates NBD", "QNB", "Riyad Bank"],
+      description: "Финансовые операции на Ближнем Востоке.",
+      rating: 7.9
     },
     {
-      name: "Trader Nine",
-      banks: ["ING Bank", "Commerzbank"],
-      description: "Specialist in cross-border investments and currency hedging for multinational clients.",
-      currencies: ["EUR", "USD", "CHF"]
+      id: 9,
+      name: "BalticTrade",
+      countries: ["Estonia", "Latvia", "Lithuania"],
+      banks: ["LHV", "Swedbank"],
+      description: "Региональный игрок с растущей репутацией.",
+      rating: 7.5
     },
     {
-      name: "Trader Ten",
-      banks: ["Royal Bank of Canada", "TD Bank"],
-      description: "Focuses on equity markets, combining technical setups with market sentiment analysis.",
-      currencies: ["CAD", "USD", "EUR"]
+      id: 10,
+      name: "IberiaMarkets",
+      countries: ["Spain", "Portugal"],
+      banks: ["Santander", "CaixaBank"],
+      description: "Активная торговля на южноевропейских биржах.",
+      rating: 8.1
+    },
+    {
+      id: 11,
+      name: "NordicFunds",
+      countries: ["Denmark", "Sweden"],
+      banks: ["Nordea", "Danske Bank"],
+      description: "Инвестиционные фонды северной Европы.",
+      rating: 8.6
+    },
+    {
+      id: 12,
+      name: "AmeriTradePro",
+      countries: ["USA", "Mexico"],
+      banks: ["Wells Fargo", "BBVA"],
+      description: "Торговля акциями и опционами Америки.",
+      rating: 9.1
+    },
+    {
+      id: 13,
+      name: "CapitalBridge",
+      countries: ["UK", "Ireland"],
+      banks: ["Barclays", "Lloyds"],
+      description: "Финансовый посредник для корпоративных клиентов.",
+      rating: 8.4
+    },
+    {
+      id: 14,
+      name: "SwissPeak",
+      countries: ["Switzerland"],
+      banks: ["UBS", "Julius Baer"],
+      description: "Премиум трейдер с высокими стандартами обслуживания.",
+      rating: 9.6
+    },
+    {
+      id: 15,
+      name: "AsiaPrime",
+      countries: ["Japan", "South Korea", "China"],
+      banks: ["Mizuho", "Kookmin Bank"],
+      description: "Продвинутая торговая платформа для азиатских инвесторов.",
+      rating: 8.7
+    },
+    {
+      id: 16,
+      name: "OceanicFX",
+      countries: ["Australia", "Singapore"],
+      banks: ["DBS", "Commonwealth Bank"],
+      description: "Форекс-брокер с упором на прозрачность.",
+      rating: 7.8
+    },
+    {
+      id: 17,
+      name: "BlueRock Capital",
+      countries: ["UK", "Germany", "Netherlands"],
+      banks: ["HSBC", "ING", "Deutsche Bank"],
+      description: "Европейский фонд с сильной аналитикой.",
+      rating: 8.9
+    },
+    {
+      id: 18,
+      name: "ArcticTrade",
+      countries: ["Iceland", "Norway"],
+      banks: ["Arion Bank", "DNB"],
+      description: "Небольшая, но устойчивая трейдинговая компания.",
+      rating: 7.6
+    },
+    {
+      id: 19,
+      name: "MediterraneoInvest",
+      countries: ["Italy", "Greece", "Spain"],
+      banks: ["UniCredit", "Alpha Bank"],
+      description: "Традиционные инвестиции с южным колоритом.",
+      rating: 8.2
+    },
+    {
+      id: 20,
+      name: "GlobalEdge",
+      countries: ["USA", "UK", "Singapore", "Switzerland"],
+      banks: ["HSBC", "UBS", "Barclays", "DBS"],
+      description: "Международная платформа с мультивалютной поддержкой.",
+      rating: 9.4
     }
   ];
 
+  const { client } = useClient();
+
   return (
     <section className="TradersList">
-      {traders.map(trader => <TraderCard trader={ trader } />)}
+      {traders.map(trader => <TraderCard client={ client } trader={ trader } />)}
     </section>
   );
 }

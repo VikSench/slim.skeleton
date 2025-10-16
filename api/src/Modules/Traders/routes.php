@@ -1,20 +1,19 @@
 <?php declare(strict_types=1);
 
-use App\Middlewares\AuthMiddleware;
+// use App\Middlewares\AuthMiddleware;
 use App\Middlewares\EnforceContentTypeMiddleware;
 use App\Middlewares\EnsureContentTypeMiddleware;
-use App\Modules\Logger\Actions\TelegramAction;
-use Monolog\Logger;
+use App\Modules\Traders\Actions\ListAction;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
-    $app->group('/api/v1/logger', function(RouteCollectorProxy $group) {
-        $group->post('/telegram', TelegramAction::class);
+    $app->group('/api', function(RouteCollectorProxy $group) {
+        $group->group('/v1', function(RouteCollectorProxy $group) {
+            $group->get('/traders', ListAction::class);
+        });
     })
-        ->addMiddleware(new AuthMiddleware(
-            $app->getContainer()->get(Logger::class))
-        )
+        // ->addMiddleware(new AuthMiddleware)
         ->addMiddleware(new EnsureContentTypeMiddleware('application/json'))
         ->addMiddleware(new EnforceContentTypeMiddleware('application/json'));
 };
